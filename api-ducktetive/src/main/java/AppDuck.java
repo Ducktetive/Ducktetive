@@ -15,8 +15,15 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 public class AppDuck {
     public static Log log = new Log();
+
     public static void main(String[] args) {
         Looca looca = new Looca();
         ConexaoBanco conexao = new ConexaoBanco();
@@ -29,37 +36,37 @@ public class AppDuck {
 
         do {
             System.out.println("""
-                                                              
                     +---------------------------------+
                     |      BEM VINDO DUCKTETIVE       |   
                     +---------------------------------+
                     | ESCOLHA UMA DAS OPÇÕES:         |
                     | 1) Login                        |
-                    | 2) Sair                         |
+                    | 3) Sair                         |
                     +---------------------------------+
                     """);
             opcao = in.nextInt();
 
             switch (opcao) {
                 case 1:
-                    System.out.println();
                     logar(con, in, looca, timer);
                     log.gravar("Metodo main() caiu no caso 1 na linha 42", "system");
                     break;
                 case 2:
+                    visualizarMetricasPorDia(con, in);
+                    break;
+                case 3:
                     System.out.println("Saindo....");
                     System.exit(0);
-                    log.gravar("Metodo main() caiu no caso 2 na linha 46", "system");
+                    log.gravar("Metodo main() caiu no caso 3 na linha 46", "system");
                     break;
                 default:
                     System.out.println("Invalido");
                     log.gravar("Metodo main() ouve uma exeção, usuário inseriu valor invalido", "erro");
             }
 
-        } while (opcao != 2);
+        } while (opcao != 3);
 
     }
-
 
     public static void inserirDadosMetrica(JdbcTemplate con, Looca looca, Timer timer) {
         timer.schedule(new TimerTask() {
@@ -405,6 +412,9 @@ public class AppDuck {
                             System.out.println(servidores);
                             break;
                         case 2:
+                            visualizarMetricasPorDia(con, in);
+                            break;
+                        case 3:
                             log.gravar("Caiu no caso 2 do metodo logar() na linha 406", "system");
                             System.out.println("Saindo....");
                             log.gravar("Usuario fez logout", "system");
@@ -419,6 +429,32 @@ public class AppDuck {
         } else {
             System.out.println("Email ou senha invalidos!");
             log.gravar("Usuario informou informações invalidar na hora do login como senha ou email","erro");
+        }
+    }
+
+    // Adicione este método para visualizar as métricas por dia
+    public static void visualizarMetricasPorDia(JdbcTemplate con, Scanner in) {
+        System.out.println("Insira a data no formato yyyy-MM-dd:");
+        String dataInserida = in.next();
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dataEscolhida = sdf.parse(dataInserida);
+
+            List<Metrica> metricas = con.query("SELECT * FROM Metrica WHERE dataHora >= ? AND dataHora < ?;", new BeanPropertyRowMapper<>(Metrica.class), dataEscolhida, new Date(dataEscolhida.getTime() + 86400000));
+
+            if (!metricas.isEmpty()) {
+                System.out.println("Métricas para o dia " + dataInserida + ":");
+                for (Metrica metrica : metricas) {
+                    System.out.println(metrica);
+                }
+            } else {
+                System.out.println("Nenhuma métrica encontrada para o dia " + dataInserida);
+            }
+
+        } catch (ParseException e) {
+            System.out.println("Formato de data inválido. Use o formato yyyy-MM-dd.");
+            log.gravar("Usuário inseriu uma data inválida ao visualizar métricas por dia", "erro");
         }
     }
 
