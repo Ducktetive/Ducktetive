@@ -269,7 +269,7 @@ public class AppDuck {
                             | ESCOLHA UMA DAS OPÇÕES:             |
                             | 1) Ativar Servidor                  |
                             | 2) Exibir Servidores Inativos       |
-                            | 3) Ver Processos                    |
+                            | 3) Maiores métricas da RAM          |
                             | 4) Sair                             |
                             +-------------------------------------+       
                             """);
@@ -378,22 +378,13 @@ public class AppDuck {
                         case 3:
                             log.gravar("O metodo logar caiu no caso 3 na linha 378", "system");
 
-                            List<ProcessoI> processos = con.query("SELECT processo.idProcesso,\n" +
-                                    "\t   processo.pId,\n" +
-                                    "       processo.nome as nomeProcesso,\n" +
-                                    "       processo.consumoCPU as ConsumoCpu,\n" +
-                                    "       processo.consumoMem,\n" +
-                                    "       StatusProcesso.nome as status,\n" +
-                                    "       AcaoProcesso.nome as acao\n" +
-                                    " FROM processo \n" +
-                                    "JOIN servidor ON \n" +
-                                    "processo.fkServidor = idServidor\n" +
-                                    "JOIN StatusProcesso ON\n" +
-                                    "processo.fkStatusProce = idStatusProcesso\n" +
-                                    "JOIN AcaoProcesso ON\n" +
-                                    "processo.fkAcaoProcesso = idAcaoProcesso\n" +
-                                    "WHERE idServidor != 1;", new BeanPropertyRowMapper<>(ProcessoI.class));
-                            System.out.println(processos);
+                            List<Metrica> maioresMetricasRam = con.query("SELECT c.nome,\n" +
+                                    "valor,\n" +
+                                    "datahora as dataHora\n" +
+                                    "FROM metrica join componente c on fkConfigComponente = idComponente\n" +
+                                    "WHERE c.nome = 'Ram'\n" +
+                                    "ORDER BY valor DESC limit 5;", new BeanPropertyRowMapper<>(Metrica.class));
+                            System.out.println(maioresMetricasRam);
                             break;
                         case 4:
                             log.gravar("O metodo logar() caiu no caso 4 na linha 398", "system");

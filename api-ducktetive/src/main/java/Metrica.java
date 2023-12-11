@@ -94,13 +94,11 @@ public class Metrica {
     @Override
     public String toString() {
         return String.format("""
-                    Metrica
-                ID: %d
-                Valor: %.2f
+                    
+                    Maiores medidas RAM 
+                Valor: %.2f GB
                 Data Hora: %s
-                FkComponente: %d
-                FkServidor: %d
-                FkEspecMetrica: %d
-                """, idMetrica, valor, dataHora, fkConfigComponente, fkConfigServidor, fkEspecMetrica);
+                
+                """, valor, dataHora);
     }
 }

@@ -7,6 +7,7 @@
     <list default="true" id="b393ca37-72d3-46d7-b4a0-95f6f3030545" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api-ducktetive/src/main/java/AppDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/../api-ducktetive/src/main/java/AppDuck.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +29,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "kaikycruz",
     "last_opened_file_path": "C:/Users/kaiky/OneDrive/Área de Trabalho/Ducktetive/JAR INDIVIDUAL"
   }
 }]]></component>
