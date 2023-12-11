@@ -265,12 +265,13 @@ public class AppDuck {
                 Integer opcaoAdm;
                 do {
                     System.out.println("""
-                            +---------------------------------+
-                            | ESCOLHA UMA DAS OPÇÕES:         |
-                            | 1) Ativar Servidor              |
-                            | 2) Exibir Servidores Inativos   |
-                            | 3) Sair                         |
-                            +---------------------------------+       
+                            +-------------------------------------+
+                            | ESCOLHA UMA DAS OPÇÕES:             |
+                            | 1) Ativar Servidor                  |
+                            | 2) Exibir Servidores Inativos       |
+                            | 3) Ver Processos                    |
+                            | 4) Sair                             |
+                            +-------------------------------------+       
                             """);
                     opcaoAdm = in.nextInt();
                     switch (opcaoAdm) {
@@ -373,8 +374,29 @@ public class AppDuck {
                             List<Servidor> servidores2 = con.query("SELECT Servidor.idServidor, Servidor.nome, StatusServidor.nome AS status FROM Servidor JOIN StatusServidor ON Servidor.fkStatusServ = StatusServidor.idStatusServidor JOIN Empresa ON Servidor.fkEmpresa = Empresa.idEmpresa JOIN Usuario ON Usuario.fkEmpresa = Empresa.idEmpresa WHERE Usuario.idUsuario = ? AND Servidor.fkStatusServ != 1;", new BeanPropertyRowMapper<>(Servidor.class), usuarios.get(0).getIdUsuario());
                             System.out.println(servidores2);
                             break;
+
                         case 3:
-                            log.gravar("O metodo logar() caiu no caso 3 na linha 375", "system");
+                            log.gravar("O metodo logar caiu no caso 3 na linha 378", "system");
+
+                            List<ProcessoI> processos = con.query("SELECT processo.idProcesso,\n" +
+                                    "\t   processo.pId,\n" +
+                                    "       processo.nome as nomeProcesso,\n" +
+                                    "       processo.consumoCPU as ConsumoCpu,\n" +
+                                    "       processo.consumoMem,\n" +
+                                    "       StatusProcesso.nome as status,\n" +
+                                    "       AcaoProcesso.nome as acao\n" +
+                                    " FROM processo \n" +
+                                    "JOIN servidor ON \n" +
+                                    "processo.fkServidor = idServidor\n" +
+                                    "JOIN StatusProcesso ON\n" +
+                                    "processo.fkStatusProce = idStatusProcesso\n" +
+                                    "JOIN AcaoProcesso ON\n" +
+                                    "processo.fkAcaoProcesso = idAcaoProcesso\n" +
+                                    "WHERE idServidor != 1;", new BeanPropertyRowMapper<>(ProcessoI.class));
+                            System.out.println(processos);
+                            break;
+                        case 4:
+                            log.gravar("O metodo logar() caiu no caso 4 na linha 398", "system");
                             System.out.println("Saindo....");
                             System.exit(0);
                             break;
@@ -383,7 +405,7 @@ public class AppDuck {
                             System.out.println("Invalido");
                     }
 
-                } while (opcaoAdm != 3);
+                } while (opcaoAdm != 4);
             } else {
                 log.gravar("Caiu no else do metodo logar() na linha 386", "system");
                 System.out.println("Bem vindo " + usuarios.get(0).getNome());
